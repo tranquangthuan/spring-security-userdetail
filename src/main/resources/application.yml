@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    dbcp:
+      test-while-idle: true
+      validation-query: SELECT 1
+    password: root
+    url: jdbc:mysql://localhost:3306/spring_security?createDatabaseIfNotExist=true
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 495118484923-5cgude60565eof03cve5ts5ofpeoceqh.apps.googleusercontent.com
+            client-secret: l4i4feLS6dPp-j-E3UArTrFD
+            scope: 
+            - email
+            - profile

@@ -12,9 +12,14 @@
 		<p th:if="${param.logout}" class="success">You have been logged
 			out</p>
 		<h3>Login to continue</h3>
+		<div>
+			<a th:href="@{/oauth2/authorization/google}">Login with Google</a>
+		</div>
+		${pageContext.request.userPrincipal.name}
 		<form th:action="@{/login}" method="POST">
-			Email : <input type="text" name="email" placeholder="Your email" /><br /> 
-			Password : <input type="password" name="password" placeholder="Your password" /><br />
+			Email : <input type="text" name="email" placeholder="Your email" /><br />
+			Password : <input type="password" name="password"
+				placeholder="Your password" /><br />
 			<button type="submit">Login</button>
 			<br />
 		</form>

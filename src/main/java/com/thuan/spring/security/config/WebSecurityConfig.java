@@ -11,9 +11,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.thuan.spring.security.oauth2.CustomOAuth2UserService;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	@Autowired
+	private CustomOAuth2UserService customOAuth2UserService;
 
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -31,16 +35,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/register").permitAll()
-		.antMatchers("/").hasRole("MEMBER")
-		.antMatchers("/admin").hasRole("ADMIN")
-		.and().formLogin().loginPage("/login")
-		.usernameParameter("email")
-		.passwordParameter("password")
-		.defaultSuccessUrl("/")
-		.failureUrl("/login?error")
+		//.antMatchers("/css/**").permitAll()
+		.antMatchers("/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg",
+				"/**/*.html", "/**/*.css", "/**/*.js")
+		.permitAll()
+		.antMatchers("/login").permitAll()
+		.antMatchers("/oauth2/**").permitAll()
+		//.antMatchers("/").hasRole("MEMBER")
+		//.antMatchers("/admin").hasRole("ADMIN")
+		.anyRequest().authenticated()
 		.and()
-		.exceptionHandling()
-		.accessDeniedPage("/403");
+		.formLogin()
+			.loginPage("/login")
+			.usernameParameter("email")
+			.passwordParameter("password")
+			.defaultSuccessUrl("/")
+		.and()
+		.oauth2Login()
+			.loginPage("/login")
+			.defaultSuccessUrl("/")
+			.userInfoEndpoint()
+			.userService(customOAuth2UserService)
+			.and()
+		.and()
+		.logout().permitAll();
 	}
 }
